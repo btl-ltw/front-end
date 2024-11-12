@@ -1,0 +1,150 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    max-width: 1700px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.container-about {
+    display: flex;
+    gap: 20px;
+}
+
+
+.coverImage {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.summary {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.synopsis {
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.comic-info {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.authorInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.author {
+    font-size: 1.2em;
+    color: #0070f3;
+}
+
+.followButton {
+    padding: 10px 15px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.followButton:hover {
+    background-color: #005bb5;
+}
+
+.readingOptions,
+.authorNote,
+.comments,
+.relatedNovels,
+.shareButtons {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.readButton {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.readButton:hover {
+    background-color: #218838;
+}
+
+.relatedNovels {
+    margin-top: 30px;
+}
+
+.relatedNovelsList {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.relatedNovel {
+    display: block;
+    text-align: center;
+}
+
+.relatedNovel img {
+    border-radius: 5px;
+    width: 450px;
+    height: 300px;
+}
+
+.relatedNovels li {
+    margin: 5px 0;
+}
+
+.shareButtons button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    background-color: #e7e7e7;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.shareButtons button:hover {
+    background-color: #d0d0d0;
+}
