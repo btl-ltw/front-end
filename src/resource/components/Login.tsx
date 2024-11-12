@@ -30,10 +30,10 @@ const Login = () => {
         return response.json(); // Parse the JSON from the response
       })
       .then((data) => {
-        console.log("Success:", data); // Handle the data from the response
+        console.log("Success:", data); 
         const token = data.message;
         const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 1); // Set expiry date to 1 day from now
+        expiryDate.setDate(expiryDate.getDate() + 1); 
         document.cookie = `token=${token}; expires=${expiryDate.toUTCString()}; path=/`;
       })
       .catch((error) => {
@@ -67,12 +67,12 @@ const Login = () => {
         </div>
       </div>
       <div className="forgotPass">
-        Do Not Have Account ? <span>Click Here</span>
+        Do Not Have Account ? <Link href="register">Click Here</Link>
       </div>
 
       <div className="submit-container">
         <button className="submit" onClick={LoginSubmit}>
-          Login{" "}
+          Login
         </button>
       </div>
     </div>

@@ -1,7 +1,11 @@
 import Image from 'next/image';
 import '@/resource/styles/HomePage.css';
 import Link from 'next/link';
-import user_icon from '@/resource/images/person.png';
+import user_icon from '@/resource/images/person.png';console.log('Rendering Home component');
+console.log('Rendering Featured Novels section');
+console.log('Rendering Latest Releases section');
+console.log('Rendering Popular Novels section');
+console.log('Rendering footer');
 
 function Home() { 
     return (
