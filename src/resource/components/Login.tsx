@@ -6,9 +6,14 @@ import email_icon from "@/resource/images/email.png";
 import password_icon from "@/resource/images/password.png";
 import Link from "next/link";
 import { useState } from "react";
+import Cookies from "js-cookie";
+import {log} from "node:util";
+
+
 const Login = () => {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("heheboi1");
+  const [password, setPassword] = useState("12312312a");
+
   function LoginSubmit() {
     const url = "https://ltwbe.hcmutssps.id.vn/auth/login";
     const data = {
@@ -17,28 +22,43 @@ const Login = () => {
     };
 
     fetch(url, {
-      method: "PUT", // Use the PUT method
+      method: "PUT",
       headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data), // Convert the data object to a JSON string
+      body: JSON.stringify(data),
     })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
-        return response.json(); // Parse the JSON from the response
+        return response.json();
       })
       .then((data) => {
-        console.log("Success:", data); 
+        console.log(data)
         const token = data.message;
         const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + 1); 
-        document.cookie = `token=${token}; expires=${expiryDate.toUTCString()}; path=/`;
+        expiryDate.setHours(expiryDate.getHours() + 1);
+        document.cookie = `token=${token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=None; Secure;`;
       })
       .catch((error) => {
         console.error("Error:", error); // Handle any errors
       });
+
+    const token = Cookies.get('token');
+
+    fetch("http://localhost:8080/api/getUserInfo", {
+        headers: {
+            'Authorization': `${token}`
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
   }
   return (
     <div className="container">
