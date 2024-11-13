@@ -78,7 +78,7 @@ const Login = () => {
 
       <div className="submit-container">
         <button className="submit" onClick={LoginSubmit}>
-          {" "}
+        
           Sign Up
         </button>
       </div>
