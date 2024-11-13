@@ -92,3 +92,23 @@ body {
     background: #eaeaea;
     color:#686868;
 }
+.wrongpass{
+    display:block;
+    color:red;
+    font-weight: bold;
+    padding-left:62px;
+    font-size:18px;
+}
+.success-message {
+    color: green;
+    /* Change this to your desired color */
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    padding-left: 62px;
+    /* Make the text bold */
+}
+.redirect{
+    padding-left: 62px;
+    font-size: 18px;
+}

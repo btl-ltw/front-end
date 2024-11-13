@@ -7,11 +7,13 @@ import password_icon from "@/resource/images/password.png";
 import Link from "next/link";
 import { useState } from "react";
 
-const Login = () => {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  function LoginSubmit() {
+const Register = () => {
+  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>(""); // State for success message
+
+  const LoginSubmit = async () => {
     const url = "https://ltwbe.hcmutssps.id.vn/auth/register";
     const data = {
       username: userName,
@@ -19,26 +21,30 @@ const Login = () => {
       password: password,
     };
 
-    fetch(url, {
-      method: "POST", // Use the PUT method
-      headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
-      },
-      body: JSON.stringify(data), // Convert the data object to a JSON string
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.json(); // Parse the JSON from the response
-      })
-      .then((data) => {
-        console.log("Success:", data); // Handle the data from the response
-      })
-      .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+    try {
+      const response = await fetch(url, {
+        method: "POST", // Use the POST method
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(data), // Convert the data object to a JSON string
       });
-  }
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+
+      const result = await response.json(); // Parse the JSON from the response
+      console.log("Success:", result); // Handle the data from the response
+
+      // Set success message after registration
+      setSuccessMessage("Registration successful! You can now log in.");
+    } catch (error) {
+      console.error("Error:", error); // Handle any errors
+      setSuccessMessage(""); // Clear success message in case of error
+    }
+  };
+
   return (
     <div className="container">
       <div className="header">
@@ -48,7 +54,7 @@ const Login = () => {
 
       <div className="inputs">
         <div className="input">
-          <Image src={user_icon} alt="" />
+          <Image src={user_icon} alt="User Icon" />
           <input
             type="text"
             placeholder="User Name"
@@ -57,7 +63,7 @@ const Login = () => {
           />
         </div>
         <div className="input">
-          <Image src={email_icon} alt="" />
+          <Image src={email_icon} alt="Email Icon" />
           <input
             type="email"
             placeholder="Email"
@@ -66,7 +72,7 @@ const Login = () => {
           />
         </div>
         <div className="input">
-          <Image src={password_icon} alt="" />
+          <Image src={password_icon} alt="Password Icon" />
           <input
             type="password"
             placeholder="Password"
@@ -75,14 +81,22 @@ const Login = () => {
           />
         </div>
       </div>
+      <div className="redirect">
+        <span>Already have an account? Log in <Link href="/login">here</Link></span>
+      </div>
+      {successMessage && (
+        <div className="success-message">{successMessage}</div> // Display success message
+      )}
 
       <div className="submit-container">
         <button className="submit" onClick={LoginSubmit}>
-        
           Sign Up
         </button>
       </div>
+
+      
     </div>
   );
 };
-export default Login;
+
+export default Register;

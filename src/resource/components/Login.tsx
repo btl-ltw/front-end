@@ -2,64 +2,70 @@
 import Image from "next/image";
 import "@/resource/styles/Login.css";
 import user_icon from "@/resource/images/person.png";
-import email_icon from "@/resource/images/email.png";
 import password_icon from "@/resource/images/password.png";
 import Link from "next/link";
 import { useState } from "react";
 import Cookies from "js-cookie";
-import {log} from "node:util";
+import { useRouter } from "next/navigation";
 
-
-const Login = () => {
-  const [userName, setUserName] = useState("heheboi1");
-  const [password, setPassword] = useState("12312312a");
-
-  function LoginSubmit() {
-    const url = "https://ltwbe.hcmutssps.id.vn/auth/login";
+const Login: React.FC = () => {
+  const [userName, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showWrongPass, setShowWrongPass] = useState<boolean>(false); // State to show/hide the wrong password message
+  const router = useRouter();
+  const LoginSubmit = async (): Promise<void> => {
+    const url = `https://ltwbe.hcmutssps.id.vn/auth/login`;
     const data = {
       username: userName,
       password: password,
     };
 
-    fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data)
-        const token = data.message;
-        const expiryDate = new Date();
-        expiryDate.setHours(expiryDate.getHours() + 1);
-        document.cookie = `token=${token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=None; Secure;`;
-      })
-      .catch((error) => {
-        console.error("Error:", error); // Handle any errors
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
 
-    const token = Cookies.get('token');
+      if (!response.ok) {
+        setShowWrongPass(true); // Show wrong password message
+        Cookies.remove('token');
+        throw new Error("Network response was not ok " + response.statusText);
+      }
 
-    fetch("http://localhost:8080/api/getUserInfo", {
+      setShowWrongPass(false); // Hide wrong password message if successful
+      const result = await response.json();
+      const token: string = result.message; // Explicitly define the type of token
+      console.log(result);// Print result( AUTH or Not AUTH in console)
+      // Set cookie with token
+      const expiryDate = new Date();
+      expiryDate.setHours(expiryDate.getHours() + 1);
+      document.cookie = `token=${token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=None; Secure;`;
+      router.push('/');
+      // Fetch user info with the token
+      fetchUserInfo(token);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const fetchUserInfo = async (token: string): Promise<void> => {
+    try {
+      const response = await fetch("https://ltwbe.hcmutssps.id.vn/api/getUserInfo", {
         headers: {
-            'Authorization': `${token}`
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-  }
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.error("Error fetching user info:", err);
+    }
+  };
+
   return (
     <div className="container">
       <div className="header">
@@ -71,6 +77,7 @@ const Login = () => {
           <Image src={user_icon} alt="" />
           <input
             type="text"
+            id="userName"
             placeholder="User Name"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
@@ -80,16 +87,19 @@ const Login = () => {
           <Image src={password_icon} alt="" />
           <input
             type="password"
+            id="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </div>
+      {showWrongPass && (
+        <div className="wrongpass">Wrong Password or UserName!</div>
+      )}
       <div className="forgotPass">
-        Do Not Have Account ? <Link href="register">Click Here</Link>
+        Do Not Have Account? <Link href="register">Click Here</Link>
       </div>
-
       <div className="submit-container">
         <button className="submit" onClick={LoginSubmit}>
           Login
@@ -98,4 +108,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
