@@ -1,72 +1,101 @@
+'use client';
 import '@/resource/styles/UserInfo.css';
+import { useEffect, useState } from 'react';
+
+interface UserInfo {
+  username: string;
+  displayName: string;
+  email: string;
+  imgUrl: string;
+  vipLevel: number;
+  credits: number;
+  role?: string; 
+}
 
 const UserInfo = () => {
-    return (
-        <div className="user-info-container">
-            <div className="user-info-header">
-                <img src="https://placehold.co/100x100" alt="User  profile picture" className="user-profile-picture"/>
-                <div>
-                    <h1 className="user-name">John Doe</h1>
-                    <p className="user-email">john.doe@example.com</p>
-                </div>
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const url = 'https://ltwbe.hcmutssps.id.vn/api/getUserInfo';
+
+  const getCookie = (name: string) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop()?.split(';').shift();
+    }
+    console.log(`Cookie not found: ${name}`);
+    return null;
+  };
+
+  const token = getCookie('token');
+ 
+  
+  useEffect(() => {
+    const fetchUserInfo = async (token: string): Promise<void> => {
+      if (!token) {
+        console.error('Token not found');
+        return;
+      }
+
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Data from API:', JSON.stringify(data, null, 2)); 
+        setUserInfo(data);
+          console.log(userInfo?.displayName);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    
+    fetchUserInfo(token!);
+  }, [token]);
+
+  return (
+    <div className="user-info-container">
+      {userInfo !== null ? (
+        <>
+          <div className="user-info-header">
+            <img
+              src={userInfo.imgUrl || "https://placehold.co/100x100"}
+              alt="User profile"
+              className="user-profile-picture"
+            />
+            <div>
+              <h1 className="user-name">{userInfo.displayName || 'Default Name'}</h1>
+              <p className="user-email">{userInfo.email || 'Default Email'}</p>
             </div>
-            <div className="userinfo">
-                <div className="favorite-novels">
-                <h2 className="favorite-novels-title">Favorite Novels</h2>
-                <ul className="mt-4 space-y-4">
-                    <li className="novel-item">
-                        <img src="https://placehold.co/50x50" alt="Cover of novel 1" className="novel-cover"/>
-                        <div>
-                            <h3 className="novel-title">Novel Title 1</h3>
-                            <p className="novel-author">Author 1</p>
-                        </div>
-                    </li>
-                    <li className="novel-item">
-                        <img src="https://placehold.co/50x50" alt="Cover of novel 2" className="novel-cover"/>
-                        <div>
-                            <h3 className="novel-title">Novel Title 2</h3>
-                            <p className="novel-author">Author 2</p>
-                        </div>
-                    </li>
-                    <li className="novel-item">
-                        <img src="https://placehold.co/50x50" alt="Cover of novel 3" className="novel-cover"/>
-                        <div>
-                            <h3 className="novel-title">Novel Title 3</h3>
-                            <p className="novel-author">Author 3</p>
-                        </div>
-                    </li>
-                </ul>
-                </div>
-                <div className="info">
-                    <h2 className="favorite-novels-title">Information</h2>
-                    <p className="info-text">User Name: John Doe</p>
-                    <p className="info-text">Email: john.doe@example.com</p>
-                    <p className="info-text">Sex: Male</p>
-                    <p className="info-text">Date of birth: 02/04/1995</p>
-                    <p className="info-text">VIP level: 1</p>
-                 </div>
+          </div>
+          <div className="userinfo">
+            <div className="info">
+              <h2 className="favorite-novels-title">Information</h2>
+              <p className="info-text">Username: {userInfo.username || 'Default Username'}</p>
+              <p className="info-text">Role: {userInfo.role || 'Not Specified'}</p>
+              <p className="info-text">VIP Level: {userInfo.vipLevel || '0'}</p>
+              <p className="info-text">Credits: {userInfo.credits || '0'}</p>
             </div>
-           
-            
-            <div className="user-statistics">
-                <h2 className="statistics-title">User  Statistics</h2>
-                <div className="statistics-grid">
-                    <div className="statistics-card">
-                        <h3 className="statistics-card-title">Novels Read</h3>
-                        <p className="statistics-card-value">15</p>
-                    </div>
-                    <div className="statistics-card">
-                        <h3 className="statistics-card-title">Comments</h3>
-                        <p className="statistics-card-value">45</p>
-                    </div>
-                    <div className="statistics-card">
-                        <h3 className="statistics-card-title">Likes</h3>
-                        <p className="statistics-card-value">120</p>
-                    </div>
-                </div>
+          </div>
+          <div className="user-statistics">
+            <h2 className="statistics-title">User Statistics</h2>
+            <div className="statistics-grid">
+              <div className="statistics-card">
+                <h3 className="statistics-card-title">Credits</h3>
+                <p className="statistics-card-value">{userInfo.credits || '0'}</p>
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        </>
+      ) : (
+        <p>Loading user information...</p>
+      )}
+    </div>
+  );
 };
 
 export default UserInfo;

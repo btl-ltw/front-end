@@ -1,15 +1,12 @@
 import Image from 'next/image';
 import '@/resource/styles/HomePage.css';
 import Link from 'next/link';
-import user_icon from '@/resource/images/person.png';console.log('Rendering Home component');
-console.log('Rendering Featured Novels section');
-console.log('Rendering Latest Releases section');
-console.log('Rendering Popular Novels section');
-console.log('Rendering footer');
+import user_icon from '@/resource/images/person.png';
+
 
 function Home() { 
     return (
-         <body className="bg-gray-100">
+         <section className="bg-gray-100">
   <main className="container mx-auto px-6 py-8">
    <section className="mb-8">
     <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -156,7 +153,7 @@ function Home() {
       </footer>
       
       
- </body>
+ </section>
     )
 }
 export default Home;
