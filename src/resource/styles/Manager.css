@@ -1,61 +1,62 @@
-.manager-page-container {
-    max-width: 1200px;
-    margin: 20px auto;
+/* src/resource/styles/User.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1,
-h2 {
-    margin-bottom: 10px;
-}
-
-.user-table,
-.payment-table {
-    width: 100%;
-    border-collapse: collapse;
+h1 {
+    text-align: center;
+    color: #333;
     margin-bottom: 20px;
 }
 
-.user-table th,
-.payment-table th,
-.user-table td,
-.payment-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+.table-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-.user-table th,
-.payment-table th {
-    background-color: #f2f2f2;
-}
-
-.assign-role-container {
+.ant-table {
     margin-top: 20px;
 }
 
 .assign {
-    margin-right: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    background-color: green;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
 }
 .delete {
-    margin-right: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
     background-color: red;
     color: white;
     border: none;
     border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
 }
 
-button:hover {
+.assign:hover,
+.delete:hover {
     background-color: purple;
+}
+
+.assign:disabled,
+.delete:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button {
+    font-size: 16px;
 }

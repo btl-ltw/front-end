@@ -1,134 +1,160 @@
-/* Custom styles for UserInfo page */
+/* UserInfo.css */
 
+/* Container */
 .user-info-container {
-    max-width: 1024px;
-    /* equivalent to max-w-4xl */
-    margin: 2.5rem auto;
-    /* equivalent to mx-auto mt-10 */
-    padding: 1.5rem;
-    /* equivalent to p-6 */
-    background-color: white;
-    /* equivalent to bg-white */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* equivalent to shadow-md */
-    border-radius: 0.5rem;
-    /* equivalent to rounded-lg */
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Header */
 .user-info-header {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    /* equivalent to space-x-6 */
+    margin-bottom: 20px;
 }
 
 .user-profile-picture {
-    width: 6rem;
-    /* equivalent to w-24 */
-    height: 6rem;
-    /* equivalent to h-24 */
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    /* equivalent to rounded-full */
+    margin-right: 20px;
+    border: 2px solid #007bff;
 }
 
 .user-name {
-    font-size: 1.5rem;
-    /* equivalent to text-2xl */
+    font-size: 24px;
     font-weight: bold;
-    /* equivalent to font-bold */
+    color: #333;
 }
 
 .user-email {
-    color: #4B5563;
-    /* equivalent to text-gray-600 */
+    font-size: 16px;
+    color: #555;
 }
 
-.favorite-novels, .info {
-    margin-top: 1.5rem;
-    /* equivalent to mt-6 */
+/* Information Section */
+.info {
+    margin-top: 20px;
 }
 
-.favorite-novels-title, .info-title {
-    font-size: 1.25rem;
-    /* equivalent to text-xl */
-    font-weight: 600;
-    /* equivalent to font-semibold */
+.favorite-novels-title {
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
-.novel-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    /* equivalent to space-x-4 */
+.info-text {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0;
 }
 
-.novel-cover {
-    width: 3rem;
-    /* equivalent to w-12 */
-    height: 3rem;
-    /* equivalent to h-12 */
-    border-radius: 0.25rem;
-    /* equivalent to rounded */
+/* Buttons */
+button {
+    margin-right: 10px;
 }
 
-.novel-title {
-    font-size: 1.125rem;
-    /* equivalent to text-lg */
-    font-weight: 500;
-    /* equivalent to font-medium */
+button.ant-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
 }
 
-.novel-author {
-    color: #6B7280;
-    /* equivalent to text-gray-500 */
+button.ant-btn:hover {
+    background-color: #0056b3;
 }
 
+/* Statistics Section */
 .user-statistics {
-    margin-top: 1.5rem;
-    /* equivalent to mt-6 */
+    margin-top: 30px;
 }
 
 .statistics-title {
-    font-size: 1.25rem;
-    /* equivalent to text-xl */
-    font-weight: 600;
-    /* equivalent to font-semibold */
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
 .statistics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    /* equivalent to gap-4 */
+    display: flex;
+    justify-content: space-between;
 }
 
 .statistics-card {
-    padding: 1rem;
-    /* equivalent to p-4 */
-    background-color: #F3F4F6;
-    /* equivalent to bg-gray-100 */
-    border-radius: 0.5rem;
-    /* equivalent to rounded-lg */
-    text-align: center;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin-right: 10px;
+}
+
+.statistics-card:last-child {
+    margin-right: 0;
 }
 
 .statistics-card-title {
-    font-size: 1.125rem;
-    /* equivalent to text-lg */
-    font-weight: 500;
-    /* equivalent to font-medium */
+    font-size: 18px;
+    color: #333;
 }
 
 .statistics-card-value {
-    font-size: 1.5rem;
-    /* equivalent to text-2xl */
+    font-size: 24px;
     font-weight: bold;
-    /* equivalent to font-bold */
+    color: #007bff;
 }
-.userinfo{
-    display:flex;
-    gap:45vh;
+
+/* Modal Styles */
+.ant-modal-header {
+    background-color: #007bff;
+    color: white;
 }
-.info-text  {
-    font-style: bold;
+
+.ant-modal-title {
+    font-weight: bold;
+}
+
+.ant-modal-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ant-input {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.ant-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+/* Information Section */
+.info {
+    margin-top: 20px;
+}
+
+.favorite-novels-title {
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+.info-text {
+    font-size: 18px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.statistics-title {
+    font-size: 20px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.statistics-card-title {
+    font-size: 18px;
+    color: #333;
 }

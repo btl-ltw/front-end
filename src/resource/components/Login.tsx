@@ -55,7 +55,7 @@ const Login: React.FC = () => {
         if (userRole === 'manager') {
           router.push('/manager');
         } else if (userRole === 'publisher') {
-          router.push('/'); 
+          router.push('/publisher'); 
         } else if (userRole === 'user') {
           router.push('/');
         } else {
