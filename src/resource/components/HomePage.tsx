@@ -1,11 +1,29 @@
+'use client';
 import Image from 'next/image';
 import '@/resource/styles/HomePage.css';
 import Link from 'next/link';
 import user_icon from '@/resource/images/person.png';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 
 function Home() { 
-    return (
+  const router = useRouter();
+  useEffect(() => {
+    const getTokenFromCookies = () => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; token=`);
+      let token;
+      if (parts.length === 2) {
+        token = parts.pop()?.split(';').shift();
+      }
+      return token;
+    };
+    const token = getTokenFromCookies(); 
+    if (!token) { router.push('/login');  }
+  }, []);
+  
+  return (
          <section className="bg-gray-100">
   <main className="container mx-auto px-6 py-8">
    <section className="mb-8">

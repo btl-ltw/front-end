@@ -11,8 +11,9 @@ import { useRouter } from "next/navigation";
 const Login: React.FC = () => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [showWrongPass, setShowWrongPass] = useState<boolean>(false); // State to show/hide the wrong password message
+  const [showWrongPass, setShowWrongPass] = useState<boolean>(false);
   const router = useRouter();
+
   const LoginSubmit = async (): Promise<void> => {
     const url = `https://ltwbe.hcmutssps.id.vn/auth/login`;
     const data = {
@@ -30,28 +31,43 @@ const Login: React.FC = () => {
       });
 
       if (!response.ok) {
-        setShowWrongPass(true); // Show wrong password message
+        setShowWrongPass(true);
         Cookies.remove('token');
         throw new Error("Network response was not ok " + response.statusText);
       }
 
-      setShowWrongPass(false); // Hide wrong password message if successful
+      setShowWrongPass(false);
       const result = await response.json();
-      const token: string = result.message; // Explicitly define the type of token
-      console.log(result);// Print result( AUTH or Not AUTH in console)
+      const token: string = result.message;
+
       // Set cookie with token
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);
       document.cookie = `token=${token}; expires=${expiryDate.toUTCString()}; path=/; SameSite=None; Secure;`;
-      router.push('/');
+
       // Fetch user info with the token
-      fetchUserInfo(token);
+      const userInfo = await fetchUserInfo(token);
+      if (userInfo) {
+        console.log("Fetched User Info:", userInfo);
+        const userRole = userInfo[0].role;
+        console.log(userRole);
+        // Chuyển hướng dựa trên vai trò
+        if (userRole === 'manager') {
+          router.push('/manager');
+        } else if (userRole === 'publisher') {
+          router.push('/'); 
+        } else if (userRole === 'user') {
+          router.push('/');
+        } else {
+          router.push('/');
+        }
+      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const fetchUserInfo = async (token: string): Promise<void> => {
+  const fetchUserInfo = async (token: string): Promise<any> => {
     try {
       const response = await fetch("https://ltwbe.hcmutssps.id.vn/api/getUserInfo", {
         headers: {
@@ -61,8 +77,10 @@ const Login: React.FC = () => {
 
       const data = await response.json();
       console.log(data);
+      return data; // Trả về data để lấy role
     } catch (err) {
       console.error("Error fetching user info:", err);
+      return null; // Trả về null nếu có lỗi
     }
   };
 

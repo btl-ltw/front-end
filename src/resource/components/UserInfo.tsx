@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 
 interface UserInfo {
   username: string;
-  displayName: string;
+  display_name: string;
   email: string;
-  imgUrl: string;
+  img_url: string;
   vipLevel: number;
   credits: number;
   role?: string; 
@@ -27,7 +27,6 @@ const UserInfo = () => {
   };
 
   const token = getCookie('token');
- 
   
   useEffect(() => {
     const fetchUserInfo = async (token: string): Promise<void> => {
@@ -47,8 +46,13 @@ const UserInfo = () => {
         }
         const data = await response.json();
         console.log('Data from API:', JSON.stringify(data, null, 2)); 
-        setUserInfo(data);
-          console.log(userInfo?.displayName);
+
+        // Giả định rằng dữ liệu là một mảng và lấy phần tử đầu tiên
+        if (Array.isArray(data) && data.length > 0) {
+          setUserInfo(data[0]);
+        } else {
+          console.error('Unexpected data format:', data);
+        }
       } catch (error) {
         console.error('Error:', error);
       }
@@ -57,18 +61,24 @@ const UserInfo = () => {
     fetchUserInfo(token!);
   }, [token]);
 
+  useEffect(() => {
+    if (userInfo) {
+      console.log('User Info Updated:', userInfo);
+    }
+  }, [userInfo]);
+
   return (
     <div className="user-info-container">
       {userInfo !== null ? (
         <>
           <div className="user-info-header">
             <img
-              src={userInfo.imgUrl || "https://placehold.co/100x100"}
+              src={userInfo.img_url || "https://placehold.co/100x100"}
               alt="User profile"
               className="user-profile-picture"
             />
             <div>
-              <h1 className="user-name">{userInfo.displayName || 'Default Name'}</h1>
+              <h1 className="user-name">{userInfo.display_name || 'Default Name'}</h1>
               <p className="user-email">{userInfo.email || 'Default Email'}</p>
             </div>
           </div>
