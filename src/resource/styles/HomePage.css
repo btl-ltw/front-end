@@ -20,6 +20,12 @@ h1 {
     /* Center the title */
     margin-bottom: 1.5rem;
     /* Space below the title */
+    font-size: 4rem;
+}
+h2{
+    text-decoration: none;
+    font-size: 1.5rem;
+    color:black;
 }
 
 /* Grid styling */
@@ -87,6 +93,26 @@ footer p {
     /* Darker text color */
 }
 
+.comic-tag{
+    padding: 20px 40px;
+    border: 2px solid black;
+    border-radius: 5px;
+    height: 400px;
+    text-decoration: none;
+    margin-top: 20px;
+}
+.comic-tag p {
+    text-decoration: none;
+    /* Remove underline from paragraph tags */
+}
+
+.comic-tag a {
+    text-decoration: none;
+    /* If there are any anchor tags, remove underline */
+}
+a{
+    text-decoration: none;
+}
 .flex {
     display: flex;
     /* Flexbox for social icons */

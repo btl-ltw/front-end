@@ -2,6 +2,7 @@
 import "@/resource/styles/UserInfo.css";
 import { useEffect, useState } from "react";
 import { Modal, Button, Input, message, Table } from "antd";
+import { error } from "console";
 
 interface UserInfo {
   username: string;
@@ -31,7 +32,7 @@ const UserInfo = () => {
     "https://ltwbe.hcmutssps.id.vn/api/changeDisplayName";
   const changeEmailUrl = "https://ltwbe.hcmutssps.id.vn/api/changeEmail";
   const changePasswordUrl = "https://ltwbe.hcmutssps.id.vn/api/changePassword";
-  const depositUrl = "https://ltwbe.hcmutss.id.vn/api/deposit";
+  const depositUrl = "https://ltwbe.hcmutssps.id.vn/api/deposit";
   const paymentHistoryUrl = "https://ltwbe.hcmutssps.id.vn/api/getHistoryPayment"
   const getCookie = (name: string) => {
     if (typeof document === 'undefined') return null;
@@ -46,8 +47,7 @@ const UserInfo = () => {
 
   const token = getCookie("token");
 
-  useEffect(() => {
-    const fetchUserInfo = async (token: string): Promise<void> => {
+   const fetchUserInfo = async (token: string): Promise<void> => {
       if (!token) {
         console.error("Token not found");
         return;
@@ -74,6 +74,8 @@ const UserInfo = () => {
         console.error("Error:", error);
       }
     };
+  useEffect(() => {
+   
     getHistoryPaymentRequest();
     fetchUserInfo(token!);
   }, [token]);
@@ -94,6 +96,7 @@ const UserInfo = () => {
     } catch (error) {
       console.error("Error fetching payment history:", error);
     }
+    
   }
    const columns = [
         {
@@ -176,20 +179,29 @@ const UserInfo = () => {
       const response = await fetch(`${depositUrl}?amount=${depositAmount}`, {
         method: 'PUT',
         headers: {
+                  'Content-Type': 'application/json', 
           'Authorization': `Bearer ${token}`,
         },
-        signal: AbortSignal.timeout(8000)
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
-      }
+        //signal: AbortSignal.timeout(8000)
+      })
+     .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    }).then(data => {
+        console.log('Response:', data);
+    })
+
+
       message.success('Deposit successful!');
       setUserInfo(prev => prev ? { ...prev, credits: prev.credits + depositAmount } : null);
       setIsDepositVisible(false);
     } catch (error) {
       message.error('Failed to deposit: ' + error);
     }
+    fetchUserInfo(token!);
+    getHistoryPaymentRequest();
   };
 
 
@@ -226,7 +238,7 @@ const UserInfo = () => {
                 Role: {userInfo.role || "Not Specified"}
               </p>
               <p className="info-text">VIP Level: {userInfo.vipLevel || "0"}</p>
-              <p className="info-text">Credits: {userInfo.credits || "0"}</p>
+              
               <Button
                 onClick={() => {
                   setNewDisplayName(userInfo.display_name);
@@ -256,7 +268,7 @@ const UserInfo = () => {
             </div>
           </div>
           <div className="user-statistics">
-            <h2 className="statistics-title">User Statistics</h2>
+            
             <div className="statistics-grid">
               <div className="statistics-card">
                 <h3 className="statistics-card-title">Credits</h3>

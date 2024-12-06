@@ -1,34 +1,65 @@
 /* ChapterDetail.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
 
 .chapter-content {
-    font-family: 'Arial', sans-serif;
-    /* Choose a suitable font-family */
-    font-size: 16px;
-    /* Adjust the font size as needed */
-    line-height: 1.6;
-    /* Adjust the line height for better readability */
-    margin: 20px;
-    /* Add margin for spacing */
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: relative;
 }
 
-h1 {
+.chapter-content h1 {
     font-size: 24px;
-    /* Set the heading font size */
+    color: #333;
+    text-align: center;
     margin-bottom: 20px;
-    /* Add margin below the heading */
 }
 
-pre {
+.chapter-content pre {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
     white-space: pre-wrap;
-    /* Wrap long lines of text */
-    overflow-wrap: break-word;
-    /* Break words that exceed the container */
-    background-color: #f9f9f9;
-    /* Add a light background color */
-    padding: 10px;
-    /* Add padding for better readability */
+    word-wrap: break-word;
+    margin-bottom: 40px;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: -40px;
+    
+    /* Đặt vị trí các nút ở dưới nội dung */
+    width: 100%;
+}
+
+.navigation-buttons button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
     border-radius: 5px;
-    /* Add rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Add a subtle box shadow */
+    cursor: pointer;
+    
+    transform: translateY(50%) translateX(-13%) ;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.navigation-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.navigation-buttons button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
