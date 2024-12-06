@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'storage.googleapis.com',
+                hostname: 'i.imgur.com',
                 port: '', // Để trống cho port mặc định
                 pathname: '/**', // Cho phép tất cả các đường dẫn
             },

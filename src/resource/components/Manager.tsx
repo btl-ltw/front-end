@@ -126,7 +126,7 @@ const UserComponent = () => {
             {/* Modal để xác nhận xóa người dùng */}
             <Modal
                 title="Delete User"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={handleDeleteUser}
                 onCancel={() => setIsModalVisible(false)}
             >
