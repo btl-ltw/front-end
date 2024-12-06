@@ -149,7 +149,7 @@ const NovelDetail = () => {
                                     <td>{chapter.chapter_name}</td>
                                     <td>{chapter.price}</td>
                                     <td>
-                                        <Link href={`/chapter/${chapter.chapter_num}`}>
+                                        <Link href={`/chapter/${novel.id}/${chapter.chapter_num}`}>
                                             <button>Read</button>
                                         </Link>
                                     </td>
