@@ -43,7 +43,7 @@ const User = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
 
-        const updatedData = data.map((user) => ({
+        const updatedData = data.map((user: string) => ({
           ...user,
           role: user.role || "guest",
         }));
