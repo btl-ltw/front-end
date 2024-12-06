@@ -1,7 +1,7 @@
 "use client";
 import "@/resource/styles/UserInfo.css";
 import { useEffect, useState } from "react";
-import { Modal, Button, Input, message } from "antd";
+import { Modal, Button, Input, message, Table } from "antd";
 
 interface UserInfo {
   username: string;
@@ -17,6 +17,7 @@ const UserInfo = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isEditDisplayNameVisible, setIsEditDisplayNameVisible] =
     useState(false);
+  const [history, setHistory] = useState([]);
   const [isEditEmailVisible, setIsEditEmailVisible] = useState(false);
   const [isEditPasswordVisible, setIsEditPasswordVisible] = useState(false);
    const [isDepositVisible, setIsDepositVisible] = useState(false);
@@ -31,6 +32,7 @@ const UserInfo = () => {
   const changeEmailUrl = "https://ltwbe.hcmutssps.id.vn/api/changeEmail";
   const changePasswordUrl = "https://ltwbe.hcmutssps.id.vn/api/changePassword";
   const depositUrl = "https://ltwbe.hcmutss.id.vn/api/deposit";
+  const paymentHistoryUrl = "https://ltwbe.hcmutssps.id.vn/api/getHistoryPayment"
   const getCookie = (name: string) => {
     if (typeof document === 'undefined') return null;
     const value = `; ${document.cookie}`;
@@ -72,9 +74,41 @@ const UserInfo = () => {
         console.error("Error:", error);
       }
     };
-
+    getHistoryPaymentRequest();
     fetchUserInfo(token!);
   }, [token]);
+
+  const getHistoryPaymentRequest = async () => {
+    try {
+      const response = await fetch(paymentHistoryUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Data from API:", JSON.stringify(data, null, 2));
+      setHistory(data);
+    } catch (error) {
+      console.error("Error fetching payment history:", error);
+    }
+  }
+   const columns = [
+        {
+            title: 'User Name',
+            dataIndex: 'username',
+        },
+        {
+            title: 'Amount',
+            dataIndex: 'amount',
+        },
+        {
+            title: 'Time',
+            dataIndex: 'time',
+        },
+    ];
 
   const handleUpdateDisplayName = async () => {
     try {
@@ -144,6 +178,7 @@ const UserInfo = () => {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
+        signal: AbortSignal.timeout(8000)
       });
       if (!response.ok) {
         const errorData = await response.json();
@@ -231,6 +266,8 @@ const UserInfo = () => {
               </div>
             </div>
           </div>
+             <h1>History Payment</h1>
+            <Table dataSource={history} columns={columns} rowKey="time"/> 
 
           {/* Modal Edit Display Name */}
           <Modal

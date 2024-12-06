@@ -1,23 +1,24 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import "@/resource/styles/ChapterDetail.css";
+import { useRouter } from 'next/navigation';
 
 const ChapterDetail = () => {
-    // Lấy ID chương và ID sách từ params
     const [chapterContent, setChapterContent] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const pathname = usePathname(); // Lấy URL hiện tại
-    const parts = pathname.split('/'); // Tách theo dấu '/'
-    const bookId = parts[2]; // `/books/[book_id]/[chapter_id]` -> phần tử thứ 2
-    const chapterId = parts[3]; // `/books/[book_id]/[chapter_id]` -> phần tử thứ 3
-
-    console.log('Book ID:', bookId);
-    console.log('Chapter ID:', chapterId);
+    const [chapterName, setChapterName] = useState<string | null>(null);
+    const [chapterNum, setChapterNum] = useState<string | null>(null);
+    const [totalChapters, setTotalChapters] = useState<number>(0);
+    const router = useRouter();
+    const pathname = usePathname();
+    const parts = pathname.split('/');
+    const bookId = parts[2];
+    const chapterId = parts[3];
 
     const getChapterUrl = (bookId: string, chapterId: string) => 
         `https://ltwbe.hcmutssps.id.vn/api/getChaperFromBook?book_id=${bookId}&chapter=${chapterId}`;
-    console.log('Get Chapter Url:', getChapterUrl);
+
     const getCookie = (name: string) => {
         if (typeof document === 'undefined') return null;  
         const value = `; ${document.cookie}`;
@@ -36,7 +37,6 @@ const ChapterDetail = () => {
     }, [bookId, chapterId]);
 
     const fetchChapterContent = async (bookId: string, chapterId: string) => {
-        console.log('Fetching chapter content for Book ID:', bookId, 'Chapter ID:', chapterId);
         try {
             const response = await fetch(getChapterUrl(bookId, chapterId), {
                 headers: {
@@ -44,11 +44,14 @@ const ChapterDetail = () => {
                 },
             });
             const data = await response.json();
-            
+            console.log(bookId);
+            console.log(chapterId);
             if (data.code === 200) {
-                console.log(data.message);
                 setChapterContent(data.message[0].file_url);
-
+                setChapterName(data.message[0].chapter_name);
+                setChapterNum(data.message[0].chapter_num);
+                setTotalChapters(data.message[0].total_chapters); // Giả sử API trả về tổng số 
+                
             } else {
                 console.error('Error fetching chapter content:', data.message);
             }
@@ -59,14 +62,39 @@ const ChapterDetail = () => {
         }
     };
 
-    if (loading) return <p>Loading...</p>;
+    const handlePreviousChapter = () => {
+        const previousChapterNum = parseInt(chapterNum!) - 1;
+        if (previousChapterNum > 0) {
+            console.log(previousChapterNum);
+            router.push(`/chapter/${bookId}/${previousChapterNum}`);
+            console.log(router);          // Chuyển đến chương trước
+        }
+    };
 
+    const handleNextChapter = () => {
+        const nextChapterNum = parseInt(chapterNum!) + 1;
+        if (nextChapterNum) {
+             console.log(nextChapterNum);
+            router.push(`/chapter/${bookId}/${nextChapterNum}`);
+            console.log(router);// Chuyển đến chương tiếp theo
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
     if (!chapterContent) return <p>Chapter content not found.</p>;
 
     return (
         <div className="chapter-content">
-            <h1>Chapter Content</h1>
+            <h1>Chapter {chapterNum} - {chapterName}</h1>
             <pre>{chapterContent}</pre>
+            <div className="navigation-buttons">
+                <button onClick={handlePreviousChapter} disabled={parseInt(chapterNum!) <= 1}>
+                    Previous Chapter
+                </button>
+                <button onClick={handleNextChapter} disabled={parseInt(chapterNum!) >= totalChapters}>
+                    Next Chapter
+                </button>
+            </div>
         </div>
     );
 };

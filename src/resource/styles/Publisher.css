@@ -48,7 +48,9 @@ button:hover {
     border-radius: 8px;
     background-color: #fafafa;
 }
-
+.delete{
+    background-color: #dc3545;
+}
 .book-image {
     width: 200px;
     /* Tăng kích thước ảnh */

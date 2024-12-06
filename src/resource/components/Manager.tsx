@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useEffect, useState } from "react";
 import { Table, Modal, Input } from "antd";
 import "@/resource/styles/Manager.css";
@@ -14,15 +14,19 @@ const UserComponent = () => {
     const [dataSource, setDataSource] = useState<User[]>([]);
     const [paymentHistory, setPaymentHistory] = useState([]);
     const [usernameToDelete, setUsernameToDelete] = useState('');
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [usernameToAssignRole, setUsernameToAssignRole] = useState('');
+    const [roleToAssign, setRoleToAssign] = useState('manager'); // Mặc định gán vai trò là manager
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+    const [isAssignRoleModalVisible, setIsAssignRoleModalVisible] = useState(false);
 
     const userUrl = 'https://ltwbe.hcmutssps.id.vn/api/manager/getAllUser';
     const paymentUrl = 'https://ltwbe.hcmutssps.id.vn/api/manager/getAllHistoryPayment';
     const deleteUrl = (username: string) => `https://ltwbe.hcmutssps.id.vn/api/manager/deleteUser?username=${username}`;
+    const assignRoleUrl = (username: string, role: string) => `https://ltwbe.hcmutssps.id.vn/api/manager/assignRole?username=${username}&role=${role}`;
 
     const getCookie = (name: string) => {
-      if (typeof document === 'undefined') return null;  
-      const value = `; ${document.cookie}`;
+        if (typeof document === 'undefined') return null;  
+        const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         return parts.length === 2 ? parts.pop()?.split(';').shift() : null;
     };
@@ -78,7 +82,7 @@ const UserComponent = () => {
         console.log(`Attempting to delete user: ${usernameToDelete}`);
         try {
             const response = await fetch(deleteUrl(usernameToDelete), {
-                method: 'DELETE', // Ensure we're using the correct HTTP method
+                method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -87,13 +91,41 @@ const UserComponent = () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             
             console.log('User deleted successfully');
-
-            // Cập nhật lại danh sách người dùng
             setDataSource(prevData => prevData.filter(user => user.username !== usernameToDelete));
-            setIsModalVisible(false); // Đóng modal
-            setUsernameToDelete(''); // Xóa tên người dùng đã nhập
+            setIsDeleteModalVisible(false);
+            setUsernameToDelete('');
         } catch (error) {
             console.error('Error deleting user:', error);
+        }
+    };
+
+    const handleAssignRole = async () => {
+        console.log(`Attempting to assign role to user: ${usernameToAssignRole}`);
+        try {
+            const response = await fetch(assignRoleUrl(usernameToAssignRole, roleToAssign), {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                 // Gửi thông tin vai trò
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            console.log('Role assigned successfully');
+            // Cập nhật lại danh sách người dùng
+            setDataSource(prevData => 
+                prevData.map(user => 
+                    user.username === usernameToAssignRole ? { ...user, role: roleToAssign } : user
+                )
+            );
+
+            setIsAssignRoleModalVisible(false);
+            setUsernameToAssignRole('');
+            setRoleToAssign('manager'); // Reset lại vai trò
+        } catch (error) {
+            console.error('Error assigning role:', error);
         }
     };
 
@@ -115,8 +147,8 @@ const UserComponent = () => {
             <h1>User List</h1>
             <div className="table-container">
                 <Table dataSource={dataSource} columns={userColumns} rowKey="email" />
-                <button className="assign">Assign Role</button>
-                <button className="delete" onClick={() => setIsModalVisible(true)}>Delete User</button>
+                <button className="assign" onClick={() => setIsAssignRoleModalVisible(true)}>Assign Role</button>
+                <button className="delete" onClick={() => setIsDeleteModalVisible(true)}>Delete User</button>
             </div>
             <h1>Payment History</h1>
             <div className="table-container">
@@ -126,14 +158,33 @@ const UserComponent = () => {
             {/* Modal để xác nhận xóa người dùng */}
             <Modal
                 title="Delete User"
-                open={isModalVisible}
+                open={isDeleteModalVisible}
                 onOk={handleDeleteUser}
-                onCancel={() => setIsModalVisible(false)}
+                onCancel={() => setIsDeleteModalVisible(false)}
             >
                 <Input 
                     placeholder="Enter username to delete"
                     value={usernameToDelete}
                     onChange={(e) => setUsernameToDelete(e.target.value)}
+                />
+            </Modal>
+
+            {/* Modal để gán vai trò cho người dùng */}
+            <Modal
+                title="Assign Role"
+                open={isAssignRoleModalVisible}
+                onOk={handleAssignRole}
+                onCancel={() => setIsAssignRoleModalVisible(false)}
+            >
+                <Input 
+                    placeholder="Enter username to assign role"
+                    value={usernameToAssignRole}
+                    onChange={(e) => setUsernameToAssignRole(e.target.value)}
+                />
+                <Input 
+                    placeholder="Enter role (e.g., manager)"
+                    value={roleToAssign}
+                    onChange={(e) => setRoleToAssign(e.target.value)}
                 />
             </Modal>
         </div>

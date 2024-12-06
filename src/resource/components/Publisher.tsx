@@ -169,6 +169,48 @@ const Publisher = () => {
             fetchChapters(bookId);
         }
     };
+    const deleteBook = async (bookId: string) => {
+    const deleteBookUrl = `https://ltwbe.hcmutssps.id.vn/api/publisher/delelteBook?book_id=${bookId}`;
+
+    try {
+        const response = await fetch(deleteBookUrl, {
+            method: 'DELETE', // Sử dụng phương thức DELETE
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) throw new Error('Failed to delete book');
+        setSnackbarMessage('Book deleted successfully!');
+        setSnackbarOpen(true);
+        fetchPublishedBooks(); // Cập nhật lại danh sách truyện
+    } catch (error) {
+        setSnackbarMessage("Failed to delete book: " + error);
+        setSnackbarOpen(true);
+    }
+    };
+   const deleteChapter = async (chapterId: string, bookId:string) => {
+    const deleteChapterUrl = `https://ltwbe.hcmutssps.id.vn/api/publisher/deleteChapter?chapter_id=${chapterId}`;
+    try {
+        const response = await fetch(deleteChapterUrl, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) throw new Error('Failed to delete chapter');
+
+        setSnackbarMessage('Chapter deleted successfully!');
+        setSnackbarOpen(true);
+        
+        // Cập nhật lại danh sách chương
+         fetchChapters(bookId); // Hàm này cần được định nghĩa để lấy lại danh sách chương
+    } catch (error) {
+        setSnackbarMessage(`Error: ${error}`);
+        setSnackbarOpen(true);
+    }
+};
 
     return (
              <>
@@ -189,8 +231,8 @@ const Publisher = () => {
                         {chaptersMap[item.id] && chaptersMap[item.id].length ? 'Hide Chapters' : 'Show Chapters'}
                     </button>
                     <button onClick={() => openAddChapterModal(item.id)}>Add Chapter</button>
-
-                    {chaptersMap[item.id] && chaptersMap[item.id].length > 0 && (
+                    <button className="delete" onClick={() => deleteBook(item.id)}>Delete Book</button>
+                    {chaptersMap[item.id] && chaptersMap[item.id].length >= 0 && (
                         <div className="chapters">
                             <h2>Chapters</h2>
                             {chaptersMap[item.id].length === 0 ? (
@@ -215,6 +257,7 @@ const Publisher = () => {
                                                     <Link href={`/chapter/${item.id}/${chapter.chapter_num}`}>
                                                         <button>Read</button>
                                                     </Link>
+                                                    <button className="delete" onClick= {()=> deleteChapter(chapter.id, item.id )}>Delete Chapter</button>
                                                 </td>
                                             </tr>
                                         ))}
