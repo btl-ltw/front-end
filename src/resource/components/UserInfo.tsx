@@ -32,6 +32,7 @@ const UserInfo = () => {
   const changePasswordUrl = "https://ltwbe.hcmutssps.id.vn/api/changePassword";
   const depositUrl = "https://ltwbe.hcmutss.id.vn/api/deposit";
   const getCookie = (name: string) => {
+    if (typeof document === 'undefined') return null;
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
