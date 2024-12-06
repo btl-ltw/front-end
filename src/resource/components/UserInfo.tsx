@@ -203,7 +203,13 @@ const UserInfo = () => {
     fetchUserInfo(token!);
     getHistoryPaymentRequest();
   };
-
+  const handleLogout = () => {
+  // Xóa token khỏi cookie
+  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  
+  // Chuyển hướng đến trang đăng nhập
+  window.location.href = '/auth/login';
+};
 
   useEffect(() => {
     if (userInfo) {
@@ -263,7 +269,10 @@ const UserInfo = () => {
               >
                 Change Password
               </Button>
-                            <Button onClick={() => setIsDepositVisible(true)}>Deposit Money</Button>
+              <Button onClick={() => setIsDepositVisible(true)}>Deposit Money</Button>
+              <Button onClick={handleLogout}>
+  Logout
+</Button>
 
             </div>
           </div>

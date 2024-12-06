@@ -9,6 +9,12 @@ export default function Nav() {
     <a className="text-xl font-bold text-gray-800" href="/user/homepage">
       WebToon
           </a>
+           <a className="text-xl font-bold text-gray-800" href="/user/manager">
+      Manager Page
+          </a>
+          <a className="text-xl font-bold text-gray-800" href="/user/publisher">
+      Publisher Page
+          </a>
         
     <nav className="flex space-x-4">
    
