@@ -21,7 +21,8 @@ const UserComponent = () => {
     const deleteUrl = (username: string) => `https://ltwbe.hcmutssps.id.vn/api/manager/deleteUser?username=${username}`;
 
     const getCookie = (name: string) => {
-        const value = `; ${document.cookie}`;
+      if (typeof document === 'undefined') return null;  
+      const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         return parts.length === 2 ? parts.pop()?.split(';').shift() : null;
     };
