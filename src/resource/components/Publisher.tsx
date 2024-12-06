@@ -21,6 +21,7 @@ interface Chapter {
     chapter_name: string;
     chapter_num: string;
     price: string;
+    file: File | null;
 }
 
 const Publisher = () => {
@@ -92,7 +93,7 @@ const Publisher = () => {
             setSnackbarMessage('Chapter added successfully!');
             setSnackbarOpen(true);
             setIsAddChapterModalVisible(false);
-            setChapterData({ bookId: '', chapterName: '', chapterNum: '', file: null, price: '' });
+            setChapterData({ bookId: '', chapterName: '', chapterNum: '', file: null , price: '' });
             fetchChapters(chapterData.bookId);
         } catch (error) {
             setSnackbarMessage("Failed: " + error);
@@ -285,7 +286,10 @@ const Publisher = () => {
                     accept=".txt"
                     onChange={(e) => {
                         if (e.target.files) {
+                            //@ts-ignore
                             setChapterData({ ...chapterData, file: e.target.files[0] });
+                                
+                            
                         }
                     }}
                     required
