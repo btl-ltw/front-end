@@ -1,16 +1,43 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation'; // Sử dụng useParams thay vì useSearchParams
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import '@/resource/styles/NovelDetail.css';
 
-const getNovelUrl = (novelId: string) => `https://ltwbe.hcmutssps.id.vn/api/getBook?book_id=${novelId}`;
+// Định nghĩa các interface
+interface Chapter {
+    id: string;
+    book_id: string;
+    chapter_name: string;
+    chapter_num: string;
+    price: string;
+}
+
+interface Novel {
+    id: string;
+    name: string;
+    image_url: string;
+    category: string;
+    last_update: string;
+    view: string;
+    follow: string;
+}
+
+// Hàm để lấy URL cho tiểu thuyết
+const getNovelUrl = (novelId: string) => 
+    `https://ltwbe.hcmutssps.id.vn/api/getBook?book_id=${novelId}`;
+
+// Hàm để lấy URL cho danh sách chương
+const getChaptersUrl = (bookId: string) => 
+    `https://ltwbe.hcmutssps.id.vn/api/getChaperFromBook?book_id=${bookId}`;
 
 const NovelDetail = () => {
     const { id } = useParams(); // Lấy ID từ params
-    const [novel, setNovel] = useState<any>(null); // Trạng thái để lưu dữ liệu tiểu thuyết
+    const [novel, setNovel] = useState<Novel | null>(null); // Trạng thái để lưu dữ liệu tiểu thuyết
+    const [chapters, setChapters] = useState<Chapter[]>([]); // Trạng thái để lưu danh sách chương
     const [loading, setLoading] = useState(true); // Trạng thái loading
     console.log(id);
+    
     const getCookie = (name: string) => {
         if (typeof document === 'undefined') return null;  
         const value = `; ${document.cookie}`;
@@ -23,6 +50,7 @@ const NovelDetail = () => {
     useEffect(() => {
         if (id && token) {
             fetchNovelDetails(id[0], token);
+            fetchChapters(id[0], token); // Gọi hàm để lấy danh sách chương
         } else if (!token) {
             console.error('User not authenticated.'); // Xử lý nếu không có token
         }
@@ -36,7 +64,7 @@ const NovelDetail = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            
+
             const data = await response.json();
             console.log('API Response:', data);
 
@@ -51,6 +79,32 @@ const NovelDetail = () => {
             setLoading(false);
         }
     };
+
+ const fetchChapters = async (bookId: string, token: string) => {
+    console.log('Fetching chapters for book ID:', bookId);
+    try {
+        const response = await fetch(getChaptersUrl(bookId), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const data = await response.json();
+        console.log('Chapters API Response:', data);
+
+        if (data.code === 200) {
+            // Kiểm tra xem data.message có phải là mảng không
+            const sortedChapters = Array.isArray(data.message) 
+                ? data.message.sort((a:any, b:any) => parseInt(a.chapter_num) - parseInt(b.chapter_num)) 
+                : [];
+            setChapters(sortedChapters);
+        } else {
+            console.error('Error fetching chapters:', data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching chapters:', error);
+    }
+};
 
     if (loading) return <p>Loading...</p>; // Hiển thị trạng thái loading
 
@@ -72,11 +126,38 @@ const NovelDetail = () => {
                 </div>
             </div>
 
-            <div className="actions">
-                <Link href={`/novel/${novel.id}/read`}>
-                    <button className="readButton">Read Now</button>
-                </Link>
-                <button className="followButton">Follow</button>
+           
+
+            <div className="chapters">
+                <h2>Chapters</h2>
+                {chapters.length === 0 ? (
+                    <p>No chapters available.</p>
+                ) : (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Chapter Number</th>
+                                <th>Chapter Name</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {chapters.map(chapter => (
+                                <tr key={chapter.id}>
+                                    <td>{chapter.chapter_num}</td>
+                                    <td>{chapter.chapter_name}</td>
+                                    <td>{chapter.price}</td>
+                                    <td>
+                                        <Link href={`/chapter/${chapter.chapter_num}`}>
+                                            <button>Read</button>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </div>
     );

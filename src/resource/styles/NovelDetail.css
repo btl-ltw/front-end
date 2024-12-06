@@ -148,3 +148,53 @@ h2 {
 .shareButtons button:hover {
     background-color: #d0d0d0;
 }
+.chapters table {
+    width: 100%;
+    /* Để bảng chiếm toàn bộ chiều rộng */
+    border-collapse: collapse;
+    /* Xóa khoảng cách giữa các ô */
+    margin-top: 20px;
+    /* Khoảng cách phía trên của bảng */
+}
+
+.chapters th,
+.chapters td {
+    border: 1px solid #ddd;
+    /* Khung viền cho ô */
+    padding: 12px;
+    /* Khoảng cách bên trong ô */
+    text-align: left;
+    /* Căn trái cho nội dung */
+}
+
+.chapters th {
+    background-color: #f2f2f2;
+    /* Màu nền cho tiêu đề */
+    font-weight: bold;
+    /* In đậm tiêu đề */
+}
+
+.chapters tr:hover {
+    background-color: #f1f1f1;
+    /* Hiệu ứng hover cho hàng */
+}
+
+.chapters button {
+    background-color: #4CAF50;
+    /* Màu nền cho nút */
+    color: white;
+    /* Màu chữ cho nút */
+    border: none;
+    /* Không có khung viền */
+    padding: 8px 12px;
+    /* Khoảng cách bên trong nút */
+    cursor: pointer;
+    /* Con trỏ khi hover */
+    border-radius: 4px;
+    /* Bo tròn góc nút */
+}
+
+.chapters button:hover {
+    background-color: #45a049;
+    /* Màu nền khi hover */
+}
