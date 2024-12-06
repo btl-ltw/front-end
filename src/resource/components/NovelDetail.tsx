@@ -12,7 +12,7 @@ const NovelDetail = () => {
 
     useEffect(() => {
         if (id) {
-            fetchNovelDetails(id);
+            fetchNovelDetails(id, token);
         }
     }, [id]);
 
