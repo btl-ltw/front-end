@@ -1,7 +1,7 @@
 
-import Publisher from "@/resource/components/Publisher";
-export default function ManagerPage() { 
-    return (
-        <Publisher/>  
-    )
-}
+// import Publisher from "@/resource/components/Publisher";
+// export default function ManagerPage() { 
+//     return (
+//         <Publisher/>  
+//     )
+// }
