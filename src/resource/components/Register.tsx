@@ -82,7 +82,7 @@ const Register = () => {
         </div>
       </div>
       <div className="redirect">
-        <span>Already have an account? Log in <Link href="/login">here</Link></span>
+        <span>Already have an account? Log in <Link href="/auth/login">here</Link></span>
       </div>
       {successMessage && (
         <div className="success-message">{successMessage}</div> // Display success message

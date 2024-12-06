@@ -53,13 +53,17 @@ const Login: React.FC = () => {
         console.log(userRole);
         // Chuyển hướng dựa trên vai trò
         if (userRole === 'manager') {
-          router.push('/manager');
+          window.location.href = '/user/manager';
+
         } else if (userRole === 'publisher') {
-          router.push('/publisher'); 
+          window.location.href = '/user/publisher';
+ 
         } else if (userRole === 'user') {
-          router.push('/');
+          window.location.href = '/user/homepage';
+
         } else {
-          router.push('/');
+          window.location.href = '/user/homepage';
+
         }
       }
     } catch (error) {

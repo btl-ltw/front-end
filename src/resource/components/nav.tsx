@@ -10,7 +10,7 @@ export default function Nav() {
       WebToon
     </a>
     <nav className="flex space-x-4">
-     <a className="text-gray-800 hover:text-gray-600" href="/ ">
+     <a className="text-gray-800 hover:text-gray-600" href="/user/homepage ">
       Home
      </a>
      <a className="text-gray-800 hover:text-gray-600" href="#">
@@ -22,7 +22,7 @@ export default function Nav() {
      <a className="text-gray-800 hover:text-gray-600" href="#">
       Contact
       </a>
-      <Link href="/userinfo"><Image src={user_icon}  alt="user"></Image></Link> 
+      <Link href="/user/userinfo"><Image src={user_icon}  alt="user"></Image></Link> 
      </nav>
    </div>
   </header>
