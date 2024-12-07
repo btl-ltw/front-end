@@ -49,14 +49,14 @@ const NovelDetail = () => {
 
     useEffect(() => {
         if (id && token) {
-            fetchNovelDetails(id[0], token);
-            fetchChapters(id[0], token); // Gọi hàm để lấy danh sách chương
+            fetchNovelDetails(id, token);
+            fetchChapters(id, token); // Gọi hàm để lấy danh sách chương
         } else if (!token) {
             console.error('User not authenticated.'); // Xử lý nếu không có token
         }
     }, [id, token]);
 
-    const fetchNovelDetails = async (novelId: string, token: string) => {
+    const fetchNovelDetails = async (novelId: any, token: string) => {
         console.log('Fetching novel details for ID:', novelId);
         try {
             const response = await fetch(getNovelUrl(novelId), {
@@ -66,6 +66,7 @@ const NovelDetail = () => {
             });
 
             const data = await response.json();
+            console.log(novelId);
             console.log('API Response:', data);
 
             if (data.code === 200) {
@@ -80,7 +81,7 @@ const NovelDetail = () => {
         }
     };
 
- const fetchChapters = async (bookId: string, token: string) => {
+ const fetchChapters = async (bookId: any, token: string) => {
     console.log('Fetching chapters for book ID:', bookId);
     try {
         const response = await fetch(getChaptersUrl(bookId), {
@@ -90,6 +91,7 @@ const NovelDetail = () => {
         });
 
         const data = await response.json();
+        console.log(bookId);
         console.log('Chapters API Response:', data);
 
         if (data.code === 200) {
